@@ -31,13 +31,13 @@ public class GreetingsController {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/{name}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String greetingText(@PathVariable String name) {
         return "Hello " + name + "!";
     }
     
-    /*@RequestMapping(value = "/usuario/{nome}", method = RequestMethod.GET)
+    @RequestMapping(value = "/usuario/{nome}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public String salvarUsuario(@PathVariable String nome) {
     	try {
@@ -54,18 +54,18 @@ public class GreetingsController {
     	}
     	return null;
     }*/
-    
+
     @GetMapping(value = "/usuarios")
     public ResponseEntity<List<Usuario>> listaUsuarios(){
     	List<Usuario> usuarios = usuarioRepository.findAll();
     	return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
     }
     
-    @PostMapping(value = "salvar")
+    @PostMapping(value = "/usuario/salvar")
     @ResponseBody
-    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){
+    public ResponseEntity<List<Usuario>> salvar(@RequestBody Usuario usuario){
     	Usuario user = usuarioRepository.save(usuario);
-    	return new ResponseEntity<Usuario>(user, HttpStatus.CREATED);
+    	return listaUsuarios();
     }
     
     /*@DeleteMapping(value = "excluir")
@@ -75,7 +75,7 @@ public class GreetingsController {
     	return new ResponseEntity<String>("Usuário deletado com sucesso!", HttpStatus.OK);
     }*/
     
-    @RequestMapping(value = "/excluir/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/usuario/excluir/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Usuario>> excluir(@PathVariable Long id) {
     	usuarioRepository.deleteById(id);
@@ -91,9 +91,10 @@ public class GreetingsController {
     	
     }
     
-    @RequestMapping(value = "/usuario/list/{nome}", method = RequestMethod.GET)
+    @RequestMapping(value = "/usuario/listar/{nome}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Usuario>> buscaPorNome(@PathVariable String nome) {
+    	System.out.println("nome da pesquisa "+nome);
     	List<Usuario> usuario = usuarioRepository.buscaPorNome(nome.trim().toUpperCase());
     	return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
     	
